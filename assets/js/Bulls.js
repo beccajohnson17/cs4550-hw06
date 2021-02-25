@@ -5,7 +5,7 @@
 
 import { Container, Row, Col, Form, Table, Button } from 'react-bootstrap';
 import React, { useState, useEffect } from 'react';
-import { ch_join, ch_push, ch_reset } from './socket';
+import { ch_join, ch_push, ch_reset, ch_login } from './socket';
 
 /* If game meets the requirements of a loss, renders this view */
 function GameOver({ reset }) {
@@ -145,13 +145,64 @@ function Controls({ reset, state }) {
 
 }
 
+//Login Function, similar to lecture notes
+function Login() {
+  const [username, setUsername] = useState("");
+  const [gameName, setGameName] = useState("");
+  return (
+    /*<div className="row">
+      <div className="column">
+        <input type="text"
+               value={username}
+               onChange={(ev) => setUsername(ev.target.value)} />
+      </div>
+      <div className="column">
+        <button onClick={() => alert(username)}>
+          Login
+        </button>
+      </div>
+    </div>*/
+    
+    <Container>
+      <Row><h1>Bulls and Cows</h1></Row>
+      <Row><h2>Username</h2></Row>
+      <Row>
+        <Col>
+        <input type="text"
+               value={username}
+               onChange={(ev) => setUsername(ev.target.value)} />
+        </Col>
+      </Row>
+      <Row><h2>Game Name</h2></Row>
+      <Row>
+        <Col>
+        <input type="text"
+               value={gameName}
+               onChange={(ev) => setGameName(ev.target.value)} />
+        </Col>
+      </Row>
+      <Row>
+        <button onClick={() => ch_login(username)}>
+            Login
+        </button>
+      </Row>
+    </Container>
+  );
+}
+
+
+
 /*reads the game state and generates view accordingly, refers to Nat tuck lecture code */
 function Bulls() {
   const [state, setState] = useState({ //change gameState to state and setState
     guesses: [],
     won: false,
     lost: false,
+    username: "",
+    gameName: "",
+    //Add list of games?, map from gamenames to usernames?
   });
+  //alert("Got into Bull");
 
   useEffect(() => ch_join(setState));
 
@@ -159,6 +210,12 @@ function Bulls() {
     ch_reset();
   }
 
+  if (state.username === "" || state.username === undefined) {
+    return (
+      <Login />
+    );
+  }
+  alert("Got past login if");
   if (state.won) {
     return (
       <GameWon reset={reset} />

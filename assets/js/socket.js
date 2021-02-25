@@ -29,6 +29,13 @@ export function ch_join(cb) {
   callback(state);
 }
 
+export function ch_login(username, gameName) {
+  channel.push("login", {username: username, gameName: gameName})
+         .receive("ok", state_update)
+         .receive("error", resp => {
+           console.log("Unable to login", resp)
+         });
+}
 
 export function ch_push(guess) {
   channel.push("guess", guess)
