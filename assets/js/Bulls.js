@@ -159,6 +159,7 @@ function Bulls() {
     ch_reset();
   }
 
+
   if (state.won) {
     return (
       <GameWon reset={reset} />
